@@ -3,6 +3,7 @@ package com.example.alfreq;
 import static com.example.alfreq.ChannelRecAdapter.*;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,13 +29,13 @@ public class MainActivity extends AppCompatActivity {
         channels.add(new Channel("5","http://media-ice.musicradio.com/CapitalMP3","Capital FM London","Me","https://myradiostation.com/logo.png"));
         channels.add(new Channel("6","http://ice-sov.musicradio.com/ClassicFMMP3","Classic FM London","Me","https://myradiostation.com/logo.png"));
         channels.add(new Channel("7","http://ice-the.musicradio.com/ClassicFMMP3","Classic FM UK","Me","https://myradiostation.com/logo.png"));
-
+        channels.add(new Channel("8","https://atunwadigital.streamguys1.com/capitalfm","Capital FM Kenya","Me","https://myradiostation.com/logo.png"));
 
         ChannelRecAdapter adapter= new ChannelRecAdapter(this);
         adapter.setChannels(channels);
 
        ChannelList.setAdapter(adapter);
-       ChannelList.setLayoutManager(new LinearLayoutManager(this));
+       ChannelList.setLayoutManager(new GridLayoutManager(this,2));
 
 
     }

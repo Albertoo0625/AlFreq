@@ -2,6 +2,7 @@ package com.example.alfreq;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.view.LayoutInflater;
@@ -41,57 +42,18 @@ public class ChannelRecAdapter extends RecyclerView.Adapter<ChannelRecAdapter.Ch
     @Override
     public void onBindViewHolder(@NonNull ChannelAdaptor holder,int position) {
         holder.listItem.setText(channels.get(position).getTitle());
+        holder.title.setText(channels.get(position).getTitle());
         holder.parent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(context, channels.get(holder.getAdapterPosition()).getUrl(), Toast.LENGTH_SHORT).show();
                 String radioStreamUrl = channels.get(holder.getAdapterPosition()).getUrl();
                 System.out.println(radioStreamUrl);
-                playRadioStream(radioStreamUrl);
-            }
-
-//            private void playRadioStream(String radioStreamUrl) {
-//                try {
-//                    MediaPlayer mediaPlayer = new MediaPlayer();
-//                    mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-//                    mediaPlayer.setDataSource(radioStreamUrl);
-//                    mediaPlayer.prepare();
-//                    mediaPlayer.start();
-//                } catch (Exception e) {
-//                    Toast.makeText(context, "Error playing radio stream", Toast.LENGTH_SHORT).show();
-//                    e.printStackTrace();
-//                }
-//            }
-
-
-            private void playRadioStream(String radioStreamUrl) {
-                try {
-                    MediaPlayer mediaPlayer = new MediaPlayer();
-                    mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                    mediaPlayer.reset();
-                    mediaPlayer.setDataSource(radioStreamUrl);
-
-                    // Set error listener to capture errors during playback
-                    mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-                        @Override
-                        public boolean onError(MediaPlayer mp, int what, int extra) {
-                            Toast.makeText(context, "Error playing radio stream", Toast.LENGTH_SHORT).show();
-                            return false;
-                        }
-                    });
-
-                    mediaPlayer.prepareAsync();
-                    mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                        @Override
-                        public void onPrepared(MediaPlayer mp) {
-                            // Start playback when prepared
-                            mediaPlayer.start();
-                        }
-                    });
-                } catch (Exception e) {
-                    Toast.makeText(context, "Error playing radio stream", Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
-                }
+                AudioPlayer.getInstance(context).playRadioStream(radioStreamUrl,context);
+                Intent intent= new Intent(context,ChannelActivity.class);
+                intent.putExtra("channelId",holder.getAdapterPosition());
+                intent.putExtra("streamurl",channels.get(holder.getAdapterPosition()).getUrl());
+                context.startActivity(intent);
             }
         });
     }
@@ -102,7 +64,7 @@ public class ChannelRecAdapter extends RecyclerView.Adapter<ChannelRecAdapter.Ch
     }
 
     public class ChannelAdaptor extends RecyclerView.ViewHolder {
-        private TextView listItem,emailText;
+        private TextView listItem,title;
         private CardView parent;
 
 
@@ -110,7 +72,7 @@ public class ChannelRecAdapter extends RecyclerView.Adapter<ChannelRecAdapter.Ch
             super(itemView);
             listItem=itemView.findViewById(R.id.listitem);
             parent=itemView.findViewById(R.id.parent);
-            emailText=itemView.findViewById(R.id.emailTxt);
+            title=itemView.findViewById(R.id.title);
         }
     }
 }

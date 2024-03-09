@@ -1,0 +1,30 @@
+[
+  {
+    "id": "0",
+    "url": "http://media-ice.musicradio.com/CapitalMP3",
+    "title": "Capital FM UK",
+    "artist": "Capital FM UK",
+    "artwork": "https://classic105.com/wp-content/uploads/2018/02/Classic-105.jpg"
+  },
+  {
+    "id": "1",
+    "url": "https://uksouth.streaming.broadcast.radio/nrg",
+    "title": "NRG Radio",
+    "artist": "Me",
+    "artwork": "https://myradiostation.com/logo.png"
+  },
+  {
+    "id": "2",
+    "url": "http://ice-sov.musicradio.com/ClassicFMMP3",
+    "title": "ClassicFM London",
+    "artist": "Me",
+    "artwork": "https://myradiostation.com/logo2.png"
+  },
+  {
+    "id": "3",
+    "url": "https://atunwadigital.streamguys1.com/capitalfm",
+    "title": "Capital FM Kenya",
+    "artist": "Me",
+    "artwork": "https://myradiostation.com/logo3.png"
+  }
+]

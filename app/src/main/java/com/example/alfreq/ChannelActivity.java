@@ -7,6 +7,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
@@ -21,7 +22,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class ChannelActivity extends AppCompatActivity implements ServiceConnection {
+public class ChannelActivity extends AppCompatActivity implements ServiceConnection,ActionPlayer{
 
     private static final String ACTION_PLAY="PLAY";
     private static final String ACTION_PREV="PREV";
@@ -38,6 +39,8 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
 
     private int id;
 
+    private String url;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +48,7 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
 
         Intent intent=getIntent();
         id=intent.getIntExtra("channelId",-1);
-        String url=intent.getStringExtra("streamurl");
+        url=intent.getStringExtra("streamurl");
         System.out.println(id);
         System.out.println(url);
 
@@ -59,100 +62,98 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
 
         Intent serviceintent=new Intent(ChannelActivity.this, NotificationService.class);
         bindService(serviceintent,this,BIND_AUTO_CREATE);
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            startForegroundService(intent);
-//        }
+
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("test");
-                AudioPlayer player= AudioPlayer.getInstance(ChannelActivity.this);
-                if(!isPlaying){
-                    player.playRadioStream(url,ChannelActivity.this);
-                    isPlaying=true;
-                    showNotification(R.drawable.baseline_pause_circle_outline_24);
-                    playButton.setImageResource(R.drawable.baseline_pause_circle_outline_24);
-                }else{
-                    player.stopPlayback();
-                    isPlaying=false;
-                    playButton.setImageResource(R.drawable.baseline_play_circle_outline_24);
-                    showNotification(R.drawable.baseline_play_circle_outline_24);
-                }
+                playPause();
             }
         });
-
-
-//        pauseButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(isPlaying){
-//
-//                }else{
-//
-//                }
-//            }
-//        });
 
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isPlaying){
-                    id++;
-                    ArrayList<Channel> channels=TracksContext.getChanelList(ChannelActivity.this);
-                    if(id>channels.size()-1){
-                        id=0;
-                        Channel nextTrack=channels.get(id);
-                        String nextUrl=nextTrack.getUrl();
-                        AudioPlayer.getInstance(ChannelActivity.this).playRadioStream(nextUrl, ChannelActivity.this);
-                        isPlaying=true;
-                    }else{
-                        Channel nextTrack=channels.get(id);
-                        String nextUrl=nextTrack.getUrl();
-                        AudioPlayer.getInstance(ChannelActivity.this).playRadioStream(nextUrl, ChannelActivity.this);
-                        isPlaying=true;
-                    }
-
-                }else{
-                    AudioPlayer player= AudioPlayer.getInstance(ChannelActivity.this);
-                    player.playRadioStream(url,ChannelActivity.this);
-                    isPlaying=true;
-                }
+              next();
             }
         });
 
         prevButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isPlaying) {
-                    id--;
-                    if(id<0)
-                    {
-                        ArrayList<Channel> channels=TracksContext.getChanelList(ChannelActivity.this);
-                        id=channels.size()-1;
-                        Channel prevTrack = channels.get(id);
-                        String prevUrl = prevTrack.getUrl();
-                        AudioPlayer.getInstance(ChannelActivity.this).playRadioStream(prevUrl, ChannelActivity.this);
-                    }else {
-                        id--;
-                        ArrayList<Channel> channels = TracksContext.getChanelList(ChannelActivity.this);
-                        Channel prevTrack = channels.get(id);
-                        String prevUrl = prevTrack.getUrl();
-                        AudioPlayer.getInstance(ChannelActivity.this).playRadioStream(prevUrl, ChannelActivity.this);
-                    }
-
-                }
-                else{
-                    AudioPlayer player= AudioPlayer.getInstance(ChannelActivity.this);
-                    player.playRadioStream(url,ChannelActivity.this);
-                }
-                isPlaying=true;
+                prev();
             }
         });
     }
 
+    public void playPause(){
+        System.out.println("test");
+        AudioPlayer player= AudioPlayer.getInstance(ChannelActivity.this);
+        if(!isPlaying){
+            player.playRadioStream(url,ChannelActivity.this);
+            isPlaying=true;
+            showNotification(R.drawable.baseline_pause_circle_outline_24);
+            playButton.setImageResource(R.drawable.baseline_pause_circle_outline_24);
+        }else{
+            player.stopPlayback();
+            isPlaying=false;
+            playButton.setImageResource(R.drawable.baseline_play_circle_outline_24);
+            showNotification(R.drawable.baseline_play_circle_outline_24);
+        }
+    }
+
+    public void prev(){
+        if(isPlaying) {
+            id--;
+            if(id<0)
+            {
+                ArrayList<Channel> channels=TracksContext.getChanelList(ChannelActivity.this);
+                id=channels.size()-1;
+                Channel prevTrack = channels.get(id);
+                String prevUrl = prevTrack.getUrl();
+                AudioPlayer.getInstance(ChannelActivity.this).playRadioStream(prevUrl, ChannelActivity.this);
+            }else {
+                id--;
+                ArrayList<Channel> channels = TracksContext.getChanelList(ChannelActivity.this);
+                Channel prevTrack = channels.get(id);
+                String prevUrl = prevTrack.getUrl();
+                AudioPlayer.getInstance(ChannelActivity.this).playRadioStream(prevUrl, ChannelActivity.this);
+            }
+
+        }
+        else{
+            AudioPlayer player= AudioPlayer.getInstance(ChannelActivity.this);
+            player.playRadioStream(url,ChannelActivity.this);
+        }
+        isPlaying=true;
+    }
+
+    public void next(){
+        if(isPlaying){
+            id++;
+            ArrayList<Channel> channels=TracksContext.getChanelList(ChannelActivity.this);
+            if(id>channels.size()-1){
+                id=0;
+                Channel nextTrack=channels.get(id);
+                String nextUrl=nextTrack.getUrl();
+                AudioPlayer.getInstance(ChannelActivity.this).playRadioStream(nextUrl, ChannelActivity.this);
+                isPlaying=true;
+            }else{
+                Channel nextTrack=channels.get(id);
+                String nextUrl=nextTrack.getUrl();
+                AudioPlayer.getInstance(ChannelActivity.this).playRadioStream(nextUrl, ChannelActivity.this);
+                isPlaying=true;
+            }
+
+        }else{
+            AudioPlayer player= AudioPlayer.getInstance(ChannelActivity.this);
+            player.playRadioStream(url,ChannelActivity.this);
+            isPlaying=true;
+        }
+    }
+
 
     public void showNotification(int playPause){
-        Intent contextIntent=new Intent(this,ChannelActivity.class);
+        Intent contextIntent=new Intent(this,MainActivity.class);
         PendingIntent contextpendingIntent=PendingIntent.getActivity(this,0,contextIntent, PendingIntent.FLAG_IMMUTABLE);
 
         Intent prevIntent= new Intent(this,NotificationReceiver.class).setAction(ACTION_PREV);
@@ -205,6 +206,7 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
         NotificationService.myBinder mBinder= (NotificationService.myBinder) service;
         notificationservice=mBinder.getService();
         Log.e("CONNECTED ", notificationservice+"");
+        notificationservice.setCallBack(ChannelActivity.this);
     }
 
     @Override

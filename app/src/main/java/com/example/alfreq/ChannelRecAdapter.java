@@ -47,9 +47,9 @@ public class ChannelRecAdapter extends RecyclerView.Adapter<ChannelRecAdapter.Ch
             @Override
             public void onClick(View view) {
                 Toast.makeText(context, channels.get(holder.getAdapterPosition()).getUrl(), Toast.LENGTH_SHORT).show();
-                String radioStreamUrl = channels.get(holder.getAdapterPosition()).getUrl();
-                System.out.println(radioStreamUrl);
-                AudioPlayer.getInstance(context).playRadioStream(radioStreamUrl,context);
+//                String radioStreamUrl = channels.get(holder.getAdapterPosition()).getUrl();
+//                System.out.println(radioStreamUrl);
+//                AudioPlayer.getInstance(context).playRadioStream(radioStreamUrl,context);
                 Intent intent= new Intent(context,ChannelActivity.class);
                 intent.putExtra("channelId",holder.getAdapterPosition());
                 intent.putExtra("streamurl",channels.get(holder.getAdapterPosition()).getUrl());

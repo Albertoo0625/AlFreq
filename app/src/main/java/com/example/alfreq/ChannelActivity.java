@@ -3,7 +3,6 @@ package com.example.alfreq;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -12,8 +11,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.session.MediaSession;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.media.session.MediaSessionCompat;
@@ -21,7 +18,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -40,7 +36,7 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
     private boolean isPlaying;
     MediaSessionCompat mediaSession;
 
-
+    private int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +44,7 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
         setContentView(R.layout.activity_channel);
 
         Intent intent=getIntent();
-        final int id=intent.getIntExtra("channelId",-1);
+        id=intent.getIntExtra("channelId",-1);
         String url=intent.getStringExtra("streamurl");
         System.out.println(id);
         System.out.println(url);
@@ -101,17 +97,16 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
             @Override
             public void onClick(View v) {
                 if(isPlaying){
-                    int i = id;
-                    i++;
+                    id++;
                     ArrayList<Channel> channels=TracksContext.getChanelList(ChannelActivity.this);
-                    if(i>channels.size()-1){
-                        i=0;
-                        Channel nextTrack=channels.get(i);
+                    if(id>channels.size()-1){
+                        id=0;
+                        Channel nextTrack=channels.get(id);
                         String nextUrl=nextTrack.getUrl();
                         AudioPlayer.getInstance(ChannelActivity.this).playRadioStream(nextUrl, ChannelActivity.this);
                         isPlaying=true;
                     }else{
-                        Channel nextTrack=channels.get(i);
+                        Channel nextTrack=channels.get(id);
                         String nextUrl=nextTrack.getUrl();
                         AudioPlayer.getInstance(ChannelActivity.this).playRadioStream(nextUrl, ChannelActivity.this);
                         isPlaying=true;
@@ -129,38 +124,35 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
             @Override
             public void onClick(View v) {
                 if(isPlaying) {
-                    int i = id;
-                    i--;
-                    if(i<0)
+                    id--;
+                    if(id<0)
                     {
                         ArrayList<Channel> channels=TracksContext.getChanelList(ChannelActivity.this);
-                        i=channels.size()-1;
-                        Channel prevTrack = channels.get(i);
+                        id=channels.size()-1;
+                        Channel prevTrack = channels.get(id);
                         String prevUrl = prevTrack.getUrl();
                         AudioPlayer.getInstance(ChannelActivity.this).playRadioStream(prevUrl, ChannelActivity.this);
-                        isPlaying=true;
                     }else {
-                        i--;
+                        id--;
                         ArrayList<Channel> channels = TracksContext.getChanelList(ChannelActivity.this);
-                        Channel prevTrack = channels.get(i);
+                        Channel prevTrack = channels.get(id);
                         String prevUrl = prevTrack.getUrl();
                         AudioPlayer.getInstance(ChannelActivity.this).playRadioStream(prevUrl, ChannelActivity.this);
-                        isPlaying=true;
                     }
 
                 }
                 else{
                     AudioPlayer player= AudioPlayer.getInstance(ChannelActivity.this);
                     player.playRadioStream(url,ChannelActivity.this);
-                    isPlaying=true;
                 }
+                isPlaying=true;
             }
         });
     }
 
 
     public void showNotification(int playPause){
-        Intent contextIntent=new Intent(this,MainActivity.class);
+        Intent contextIntent=new Intent(this,ChannelActivity.class);
         PendingIntent contextpendingIntent=PendingIntent.getActivity(this,0,contextIntent, PendingIntent.FLAG_IMMUTABLE);
 
         Intent prevIntent= new Intent(this,NotificationReceiver.class).setAction(ACTION_PREV);

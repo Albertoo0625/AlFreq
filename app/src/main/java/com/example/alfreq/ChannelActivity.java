@@ -140,6 +140,17 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
                 id=channels.size()-1;
                 Channel prevTrack = channels.get(id);
                 String prevUrl = prevTrack.getUrl();
+                String prevAlbumCover=prevTrack.getArtwork();
+                int resourceId = getResources().getIdentifier(prevAlbumCover, "drawable", getPackageName());
+                System.out.println("resource time "+resourceId);
+
+                if (resourceId != 0) {
+                    album_cover.setImageResource(resourceId);
+                } else {
+                    // Resource not found
+                    // Handle this case as per your application logic
+                    Toast.makeText(ChannelActivity.this, "Resource not found", Toast.LENGTH_SHORT).show();
+                }
                 AudioPlayer.getInstance(ChannelActivity.this).playRadioStream(prevUrl, ChannelActivity.this);
                 showNotification(R.drawable.baseline_pause_circle_outline_24,id,url);
                 playButton.setImageResource(R.drawable.baseline_pause_circle_outline_24);
@@ -148,6 +159,17 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
                 ArrayList<Channel> channels = TracksContext.getChanelList(ChannelActivity.this);
                 Channel prevTrack = channels.get(id);
                 String prevUrl = prevTrack.getUrl();
+                String prevAlbumCover=prevTrack.getArtwork();
+                int resourceId = getResources().getIdentifier(prevAlbumCover, "drawable", getPackageName());
+                System.out.println("resource time "+resourceId);
+
+                if (resourceId != 0) {
+                    album_cover.setImageResource(resourceId);
+                } else {
+                    // Resource not found
+                    // Handle this case as per your application logic
+                    Toast.makeText(ChannelActivity.this, "Resource not found", Toast.LENGTH_SHORT).show();
+                }
                 AudioPlayer.getInstance(ChannelActivity.this).playRadioStream(prevUrl, ChannelActivity.this);
                 showNotification(R.drawable.baseline_pause_circle_outline_24,id,url);
                 playButton.setImageResource(R.drawable.baseline_pause_circle_outline_24);
@@ -171,6 +193,17 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
                 id=0;
                 Channel nextTrack=channels.get(id);
                 String nextUrl=nextTrack.getUrl();
+                String nextAlbumCover=nextTrack.getArtwork();
+                int resourceId = getResources().getIdentifier(nextAlbumCover, "drawable", getPackageName());
+                System.out.println("resource time "+resourceId);
+
+                if (resourceId != 0) {
+                    album_cover.setImageResource(resourceId);
+                } else {
+                    // Resource not found
+                    // Handle this case as per your application logic
+                    Toast.makeText(ChannelActivity.this, "Resource not found", Toast.LENGTH_SHORT).show();
+                }
                 AudioPlayer.getInstance(ChannelActivity.this).playRadioStream(nextUrl, ChannelActivity.this);
                 showNotification(R.drawable.baseline_pause_circle_outline_24,id,url);
                 playButton.setImageResource(R.drawable.baseline_pause_circle_outline_24);
@@ -178,6 +211,17 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
             }else{
                 Channel nextTrack=channels.get(id);
                 String nextUrl=nextTrack.getUrl();
+                String nextAlbumCover=nextTrack.getArtwork();
+                int resourceId = getResources().getIdentifier(nextAlbumCover, "drawable", getPackageName());
+                System.out.println("resource time "+resourceId);
+
+                if (resourceId != 0) {
+                    album_cover.setImageResource(resourceId);
+                } else {
+                    // Resource not found
+                    // Handle this case as per your application logic
+                    Toast.makeText(ChannelActivity.this, "Resource not found", Toast.LENGTH_SHORT).show();
+                }
                 AudioPlayer.getInstance(ChannelActivity.this).playRadioStream(nextUrl, ChannelActivity.this);
                 showNotification(R.drawable.baseline_pause_circle_outline_24,id,url);
                 playButton.setImageResource(R.drawable.baseline_pause_circle_outline_24);

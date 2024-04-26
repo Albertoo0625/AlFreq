@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -32,33 +33,58 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
     private static final String CHANNEL_ID="CHANNEL_ID";
     private ImageView playButton,prevButton,nextButton,pauseButton;
     private TextView title;
+    private ImageView album_cover;
     NotificationService notificationservice;
 
     private boolean isPlaying;
+
     MediaSessionCompat mediaSession;
 
     private int id;
 
-    private String url;
+    private String url,image;
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        id=intent.getIntExtra("channelId",-1);
+        url=intent.getStringExtra("streamurl");
+        image=intent.getStringExtra("imagepath");
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_channel);
-
-        Intent intent=getIntent();
-        id=intent.getIntExtra("channelId",-1);
-        url=intent.getStringExtra("streamurl");
-        System.out.println(id);
-        System.out.println(url);
-
-        mediaSession=new MediaSessionCompat(this,"audioPlayer");
 
         playButton=findViewById(R.id.play);
         prevButton=findViewById(R.id.skipprevious);
         nextButton=findViewById(R.id.skipnext);
         pauseButton=findViewById(R.id.pause);
         title=findViewById(R.id.title);
+        album_cover=findViewById(R.id.album_cover);
+
+        Intent intent=getIntent();
+        id=intent.getIntExtra("channelId",-1);
+        url=intent.getStringExtra("streamurl");
+        image=intent.getStringExtra("imagepath");
+
+        int resourceId = getResources().getIdentifier(image, "drawable", getPackageName());
+        System.out.println("resource time "+resourceId);
+
+        if (resourceId != 0) {
+            album_cover.setImageResource(resourceId);
+        } else {
+            // Resource not found
+            // Handle this case as per your application logic
+            Toast.makeText(ChannelActivity.this, "Resource not found", Toast.LENGTH_SHORT).show();
+        }
+
+
+        System.out.println(id);
+        System.out.println(url);
+        System.out.println(image);
+
+        mediaSession=new MediaSessionCompat(this,"audioPlayer");
 
         Intent serviceintent=new Intent(ChannelActivity.this, NotificationService.class);
         bindService(serviceintent,this,BIND_AUTO_CREATE);
@@ -83,6 +109,10 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
                 prev();
             }
         });
+
+
+
+
     }
 
     public void playPause(){
@@ -91,13 +121,13 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
         if(!isPlaying){
             player.playRadioStream(url,ChannelActivity.this);
             isPlaying=true;
-            showNotification(R.drawable.baseline_pause_circle_outline_24);
+            showNotification(R.drawable.baseline_pause_circle_outline_24,id,url);
             playButton.setImageResource(R.drawable.baseline_pause_circle_outline_24);
         }else{
             player.stopPlayback();
             isPlaying=false;
             playButton.setImageResource(R.drawable.baseline_play_circle_outline_24);
-            showNotification(R.drawable.baseline_play_circle_outline_24);
+            showNotification(R.drawable.baseline_play_circle_outline_24,id,url);
         }
     }
 
@@ -111,18 +141,24 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
                 Channel prevTrack = channels.get(id);
                 String prevUrl = prevTrack.getUrl();
                 AudioPlayer.getInstance(ChannelActivity.this).playRadioStream(prevUrl, ChannelActivity.this);
+                showNotification(R.drawable.baseline_pause_circle_outline_24,id,url);
+                playButton.setImageResource(R.drawable.baseline_pause_circle_outline_24);
             }else {
                 id--;
                 ArrayList<Channel> channels = TracksContext.getChanelList(ChannelActivity.this);
                 Channel prevTrack = channels.get(id);
                 String prevUrl = prevTrack.getUrl();
                 AudioPlayer.getInstance(ChannelActivity.this).playRadioStream(prevUrl, ChannelActivity.this);
+                showNotification(R.drawable.baseline_pause_circle_outline_24,id,url);
+                playButton.setImageResource(R.drawable.baseline_pause_circle_outline_24);
             }
 
         }
         else{
             AudioPlayer player= AudioPlayer.getInstance(ChannelActivity.this);
             player.playRadioStream(url,ChannelActivity.this);
+            showNotification(R.drawable.baseline_pause_circle_outline_24,id,url);
+            playButton.setImageResource(R.drawable.baseline_pause_circle_outline_24);
         }
         isPlaying=true;
     }
@@ -136,25 +172,38 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
                 Channel nextTrack=channels.get(id);
                 String nextUrl=nextTrack.getUrl();
                 AudioPlayer.getInstance(ChannelActivity.this).playRadioStream(nextUrl, ChannelActivity.this);
+                showNotification(R.drawable.baseline_pause_circle_outline_24,id,url);
+                playButton.setImageResource(R.drawable.baseline_pause_circle_outline_24);
                 isPlaying=true;
             }else{
                 Channel nextTrack=channels.get(id);
                 String nextUrl=nextTrack.getUrl();
                 AudioPlayer.getInstance(ChannelActivity.this).playRadioStream(nextUrl, ChannelActivity.this);
+                showNotification(R.drawable.baseline_pause_circle_outline_24,id,url);
+                playButton.setImageResource(R.drawable.baseline_pause_circle_outline_24);
                 isPlaying=true;
             }
 
         }else{
             AudioPlayer player= AudioPlayer.getInstance(ChannelActivity.this);
             player.playRadioStream(url,ChannelActivity.this);
+            showNotification(R.drawable.baseline_pause_circle_outline_24,id,url);
+            playButton.setImageResource(R.drawable.baseline_pause_circle_outline_24);
             isPlaying=true;
         }
     }
 
 
-    public void showNotification(int playPause){
+    public void showNotification(int playPause,int id,String url){
+//        Intent contextIntent=new Intent(this,ChannelActivity.class);
+//        contextIntent.putExtra("channelid",id);
+//        contextIntent.putExtra("streamurl",url);
+//        contextIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//        PendingIntent contextpendingIntent=PendingIntent.getActivity(this,0,contextIntent, PendingIntent.FLAG_IMMUTABLE);
+
         Intent contextIntent=new Intent(this,MainActivity.class);
         PendingIntent contextpendingIntent=PendingIntent.getActivity(this,0,contextIntent, PendingIntent.FLAG_IMMUTABLE);
+
 
         Intent prevIntent= new Intent(this,NotificationReceiver.class).setAction(ACTION_PREV);
         PendingIntent prevpendingIntent=PendingIntent.getBroadcast(this,0,prevIntent,PendingIntent.FLAG_UPDATE_CURRENT);

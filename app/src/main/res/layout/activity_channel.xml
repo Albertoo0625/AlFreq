@@ -8,12 +8,23 @@
    >
 
 
+    <ImageView
+        android:id="@+id/album_cover"
+        android:layout_width="900px"
+        android:layout_height="1400px"
+        android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/ic_launcher_foreground" />
+
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         >
 
 
@@ -22,11 +33,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:id="@+id/titleViewGroup"
+        android:layout_gravity="center_horizontal"
         >
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:textSize="30sp"
             android:id="@+id/title"
             android:text="title"
             />
@@ -38,31 +51,35 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:id="@+id/linlayout"
+        android:layout_gravity="center_horizontal"
         >
 
         <ImageView
             android:id="@+id/skipprevious"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            app:srcCompat="@drawable/baseline_skip_previous_24" />
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="100px"
+            app:srcCompat="@drawable/baseline_skip_previous_24"
+            />
 
         <ImageView
             android:id="@+id/play"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             app:srcCompat="@drawable/baseline_play_circle_outline_24" />
 
         <ImageView
             android:id="@+id/pause"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             app:srcCompat="@drawable/baseline_pause_circle_outline_24"
             android:visibility="gone"/>
 
         <ImageView
             android:id="@+id/skipnext"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="100px"
             app:srcCompat="@drawable/baseline_skip_next_24" />
 
       </LinearLayout>

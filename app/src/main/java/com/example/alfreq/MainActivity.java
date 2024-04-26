@@ -32,10 +32,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.setChannels(channels);
 
 
-
        ChannelList.setAdapter(adapter);
        ChannelList.setLayoutManager(new GridLayoutManager(this,2));
-
-
     }
 }

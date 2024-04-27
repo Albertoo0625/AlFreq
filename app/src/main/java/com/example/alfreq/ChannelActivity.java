@@ -181,7 +181,6 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
                 showNotification(R.drawable.baseline_pause_circle_outline_24,id,url);
                 playButton.setImageResource(R.drawable.baseline_pause_circle_outline_24);
             }
-
         }
         else{
             AudioPlayer player= AudioPlayer.getInstance(ChannelActivity.this);

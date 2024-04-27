@@ -180,6 +180,7 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
                 AudioPlayer.getInstance(ChannelActivity.this).playRadioStream(prevUrl, ChannelActivity.this);
                 showNotification(R.drawable.baseline_pause_circle_outline_24,id,url);
                 playButton.setImageResource(R.drawable.baseline_pause_circle_outline_24);
+
             }
         }
         else{

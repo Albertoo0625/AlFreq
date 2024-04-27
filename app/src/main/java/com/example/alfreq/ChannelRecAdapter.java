@@ -64,6 +64,7 @@ public class ChannelRecAdapter extends RecyclerView.Adapter<ChannelRecAdapter.Ch
                 intent.putExtra("channelId",holder.getAdapterPosition());
                 intent.putExtra("streamurl",channels.get(holder.getAdapterPosition()).getUrl());
                 intent.putExtra("imagepath",channels.get(holder.getAdapterPosition()).getArtwork());
+                intent.putExtra("titlepassed",channels.get(holder.getAdapterPosition()).getTitle());
                 context.startActivity(intent);
             }
         });

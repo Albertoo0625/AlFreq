@@ -42,15 +42,16 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
 
     private int id;
 
-    private String url,image;
+    private String url,image,titlePassed;
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        id=intent.getIntExtra("channelId",-1);
-        url=intent.getStringExtra("streamurl");
-        image=intent.getStringExtra("imagepath");
-    }
+//    @Override
+//    protected void onNewIntent(Intent intent) {
+//        super.onNewIntent(intent);
+//        id=intent.getIntExtra("channelId",-1);
+//        url=intent.getStringExtra("streamurl");
+//        image=intent.getStringExtra("imagepath");
+//        titlePassed=intent.getStringExtra("titlepassed");
+//    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +68,7 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
         id=intent.getIntExtra("channelId",-1);
         url=intent.getStringExtra("streamurl");
         image=intent.getStringExtra("imagepath");
+        titlePassed=intent.getStringExtra("titlepassed");
 
         int resourceId = getResources().getIdentifier(image, "drawable", getPackageName());
         System.out.println("resource time "+resourceId);
@@ -141,8 +143,11 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
                 Channel prevTrack = channels.get(id);
                 String prevUrl = prevTrack.getUrl();
                 String prevAlbumCover=prevTrack.getArtwork();
+                String prevTitle=prevTrack.getTitle();
+                title.setText(prevTitle);
                 int resourceId = getResources().getIdentifier(prevAlbumCover, "drawable", getPackageName());
                 System.out.println("resource time "+resourceId);
+
 
                 if (resourceId != 0) {
                     album_cover.setImageResource(resourceId);
@@ -160,6 +165,8 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
                 Channel prevTrack = channels.get(id);
                 String prevUrl = prevTrack.getUrl();
                 String prevAlbumCover=prevTrack.getArtwork();
+                String prevTitle=prevTrack.getTitle();
+                title.setText(prevTitle);
                 int resourceId = getResources().getIdentifier(prevAlbumCover, "drawable", getPackageName());
                 System.out.println("resource time "+resourceId);
 
@@ -179,6 +186,7 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
         else{
             AudioPlayer player= AudioPlayer.getInstance(ChannelActivity.this);
             player.playRadioStream(url,ChannelActivity.this);
+            title.setText(titlePassed);
             showNotification(R.drawable.baseline_pause_circle_outline_24,id,url);
             playButton.setImageResource(R.drawable.baseline_pause_circle_outline_24);
         }
@@ -194,6 +202,8 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
                 Channel nextTrack=channels.get(id);
                 String nextUrl=nextTrack.getUrl();
                 String nextAlbumCover=nextTrack.getArtwork();
+                String nextTitle=nextTrack.getTitle();
+                title.setText(nextTitle);
                 int resourceId = getResources().getIdentifier(nextAlbumCover, "drawable", getPackageName());
                 System.out.println("resource time "+resourceId);
 
@@ -212,6 +222,8 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
                 Channel nextTrack=channels.get(id);
                 String nextUrl=nextTrack.getUrl();
                 String nextAlbumCover=nextTrack.getArtwork();
+                String nextTitle=nextTrack.getTitle();
+                title.setText(nextTitle);
                 int resourceId = getResources().getIdentifier(nextAlbumCover, "drawable", getPackageName());
                 System.out.println("resource time "+resourceId);
 
@@ -231,6 +243,7 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
         }else{
             AudioPlayer player= AudioPlayer.getInstance(ChannelActivity.this);
             player.playRadioStream(url,ChannelActivity.this);
+            title.setText(titlePassed);
             showNotification(R.drawable.baseline_pause_circle_outline_24,id,url);
             playButton.setImageResource(R.drawable.baseline_pause_circle_outline_24);
             isPlaying=true;

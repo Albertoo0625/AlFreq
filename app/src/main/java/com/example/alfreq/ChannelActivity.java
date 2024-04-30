@@ -44,14 +44,16 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
 
     private String url,image,titlePassed;
 
-//    @Override
-//    protected void onNewIntent(Intent intent) {
-//        super.onNewIntent(intent);
-//        id=intent.getIntExtra("channelId",-1);
-//        url=intent.getStringExtra("streamurl");
-//        image=intent.getStringExtra("imagepath");
-//        titlePassed=intent.getStringExtra("titlepassed");
-//    }
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        id=intent.getIntExtra("channelId",-1);
+        url=intent.getStringExtra("streamurl");
+        image=intent.getStringExtra("imagepath");
+        titlePassed=intent.getStringExtra("titlepassed");
+
+        onCreate(null);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +71,7 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
         url=intent.getStringExtra("streamurl");
         image=intent.getStringExtra("imagepath");
         titlePassed=intent.getStringExtra("titlepassed");
+        title.setText(titlePassed);
 
         int resourceId = getResources().getIdentifier(image, "drawable", getPackageName());
         System.out.println("resource time "+resourceId);
@@ -112,9 +115,6 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
             }
         });
 
-
-
-
     }
 
     public void playPause(){
@@ -123,13 +123,13 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
         if(!isPlaying){
             player.playRadioStream(url,ChannelActivity.this);
             isPlaying=true;
-            showNotification(R.drawable.baseline_pause_circle_outline_24,id,url);
+            showNotification(R.drawable.baseline_pause_circle_outline_24,id,url,image,titlePassed);
             playButton.setImageResource(R.drawable.baseline_pause_circle_outline_24);
         }else{
             player.stopPlayback();
             isPlaying=false;
             playButton.setImageResource(R.drawable.baseline_play_circle_outline_24);
-            showNotification(R.drawable.baseline_play_circle_outline_24,id,url);
+            showNotification(R.drawable.baseline_play_circle_outline_24,id,url,image,titlePassed);
         }
     }
 
@@ -157,39 +157,57 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
                     Toast.makeText(ChannelActivity.this, "Resource not found", Toast.LENGTH_SHORT).show();
                 }
                 AudioPlayer.getInstance(ChannelActivity.this).playRadioStream(prevUrl, ChannelActivity.this);
-                showNotification(R.drawable.baseline_pause_circle_outline_24,id,url);
-                playButton.setImageResource(R.drawable.baseline_pause_circle_outline_24);
             }else {
-                id--;
                 ArrayList<Channel> channels = TracksContext.getChanelList(ChannelActivity.this);
-                Channel prevTrack = channels.get(id);
-                String prevUrl = prevTrack.getUrl();
-                String prevAlbumCover=prevTrack.getArtwork();
-                String prevTitle=prevTrack.getTitle();
-                title.setText(prevTitle);
-                int resourceId = getResources().getIdentifier(prevAlbumCover, "drawable", getPackageName());
-                System.out.println("resource time "+resourceId);
+                System.out.println("PROBLEMATIC ID"+ id);
+                if(id<0) {
+                    channels=TracksContext.getChanelList(ChannelActivity.this);
+                    id=0;
+                    Channel prevTrack = channels.get(id);
+                    String prevUrl = prevTrack.getUrl();
+                    String prevAlbumCover = prevTrack.getArtwork();
+                    String prevTitle = prevTrack.getTitle();
+                    title.setText(prevTitle);
+                    int resourceId = getResources().getIdentifier(prevAlbumCover, "drawable", getPackageName());
+                    System.out.println("resource time " + resourceId);
 
-                if (resourceId != 0) {
-                    album_cover.setImageResource(resourceId);
-                } else {
-                    // Resource not found
-                    // Handle this case as per your application logic
-                    Toast.makeText(ChannelActivity.this, "Resource not found", Toast.LENGTH_SHORT).show();
+                    if (resourceId != 0) {
+                        album_cover.setImageResource(resourceId);
+                    } else {
+                        // Resource not found
+                        // Handle this case as per your application logic
+                        Toast.makeText(ChannelActivity.this, "Resource not found", Toast.LENGTH_SHORT).show();
+                    }
+                    AudioPlayer.getInstance(ChannelActivity.this).playRadioStream(prevUrl, ChannelActivity.this);
+                }else{
+                   //////////////////////////////////////
+                    Channel prevTrack = channels.get(id);
+                    System.out.println("THREE CLICKS");
+                    String prevUrl = prevTrack.getUrl();
+                    String prevAlbumCover = prevTrack.getArtwork();
+                    String prevTitle = prevTrack.getTitle();
+                    title.setText(prevTitle);
+                    int resourceId = getResources().getIdentifier(prevAlbumCover, "drawable", getPackageName());
+                    System.out.println("resource time " + resourceId);
+
+                    if (resourceId != 0) {
+                        album_cover.setImageResource(resourceId);
+                    } else {
+                        // Resource not found
+                        // Handle this case as per your application logic
+                        Toast.makeText(ChannelActivity.this, "Resource not found", Toast.LENGTH_SHORT).show();
+                    }
+                    AudioPlayer.getInstance(ChannelActivity.this).playRadioStream(prevUrl, ChannelActivity.this);
                 }
-                AudioPlayer.getInstance(ChannelActivity.this).playRadioStream(prevUrl, ChannelActivity.this);
-                showNotification(R.drawable.baseline_pause_circle_outline_24,id,url);
-                playButton.setImageResource(R.drawable.baseline_pause_circle_outline_24);
-
             }
         }
         else{
             AudioPlayer player= AudioPlayer.getInstance(ChannelActivity.this);
             player.playRadioStream(url,ChannelActivity.this);
             title.setText(titlePassed);
-            showNotification(R.drawable.baseline_pause_circle_outline_24,id,url);
-            playButton.setImageResource(R.drawable.baseline_pause_circle_outline_24);
         }
+        showNotification(R.drawable.baseline_pause_circle_outline_24,id,url,image,titlePassed);
+        playButton.setImageResource(R.drawable.baseline_pause_circle_outline_24);
         isPlaying=true;
     }
 
@@ -215,9 +233,6 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
                     Toast.makeText(ChannelActivity.this, "Resource not found", Toast.LENGTH_SHORT).show();
                 }
                 AudioPlayer.getInstance(ChannelActivity.this).playRadioStream(nextUrl, ChannelActivity.this);
-                showNotification(R.drawable.baseline_pause_circle_outline_24,id,url);
-                playButton.setImageResource(R.drawable.baseline_pause_circle_outline_24);
-                isPlaying=true;
             }else{
                 Channel nextTrack=channels.get(id);
                 String nextUrl=nextTrack.getUrl();
@@ -235,31 +250,32 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
                     Toast.makeText(ChannelActivity.this, "Resource not found", Toast.LENGTH_SHORT).show();
                 }
                 AudioPlayer.getInstance(ChannelActivity.this).playRadioStream(nextUrl, ChannelActivity.this);
-                showNotification(R.drawable.baseline_pause_circle_outline_24,id,url);
-                playButton.setImageResource(R.drawable.baseline_pause_circle_outline_24);
-                isPlaying=true;
             }
 
         }else{
             AudioPlayer player= AudioPlayer.getInstance(ChannelActivity.this);
             player.playRadioStream(url,ChannelActivity.this);
             title.setText(titlePassed);
-            showNotification(R.drawable.baseline_pause_circle_outline_24,id,url);
-            playButton.setImageResource(R.drawable.baseline_pause_circle_outline_24);
-            isPlaying=true;
         }
+        showNotification(R.drawable.baseline_pause_circle_outline_24,id,url,image,titlePassed);
+        playButton.setImageResource(R.drawable.baseline_pause_circle_outline_24);
+        isPlaying=true;
     }
 
 
-    public void showNotification(int playPause,int id,String url){
-//        Intent contextIntent=new Intent(this,ChannelActivity.class);
-//        contextIntent.putExtra("channelid",id);
-//        contextIntent.putExtra("streamurl",url);
-//        contextIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//        PendingIntent contextpendingIntent=PendingIntent.getActivity(this,0,contextIntent, PendingIntent.FLAG_IMMUTABLE);
+    public void showNotification(int playPause,int id,String url,String image,String title){
+        Intent contextIntent=new Intent(this,ChannelActivity.class);
+        contextIntent.putExtra("channelid",id);
+        contextIntent.putExtra("streamurl",url);
+        contextIntent.putExtra("imagepath",image);
+        contextIntent.putExtra("titlepassed",title);
 
-        Intent contextIntent=new Intent(this,MainActivity.class);
+
+        contextIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent contextpendingIntent=PendingIntent.getActivity(this,0,contextIntent, PendingIntent.FLAG_IMMUTABLE);
+
+//        Intent contextIntent=new Intent(this,MainActivity.class);
+//        PendingIntent contextpendingIntent=PendingIntent.getActivity(this,0,contextIntent, PendingIntent.FLAG_IMMUTABLE);
 
 
         Intent prevIntent= new Intent(this,NotificationReceiver.class).setAction(ACTION_PREV);

@@ -7,11 +7,34 @@
     tools:context=".MainActivity"
     android:padding="10dp">
 
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="150px"
+        android:orientation="horizontal"
+        >
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="150px"
+            android:layout_weight="0.8"
+            android:text="Search"
+            android:id="@+id/searchBar"/>
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="150px"
+            android:layout_weight="0.2"
+            android:src="@drawable/baseline_search_24"
+            android:id="@+id/searchIcon"/>
+
+
+        
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/channelListRecView"
+        android:layout_marginTop="200px"
         />
-
-
 </RelativeLayout>

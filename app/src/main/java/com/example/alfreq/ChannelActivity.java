@@ -7,7 +7,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
-import android.content.Context;
+
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
@@ -136,12 +136,13 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
     public void prev(){
         if(isPlaying) {
             id--;
+            ArrayList<Channel> channels=TracksContext.getChanelList(ChannelActivity.this);
             if(id<0)
             {
-                ArrayList<Channel> channels=TracksContext.getChanelList(ChannelActivity.this);
                 id=channels.size()-1;
                 Channel prevTrack = channels.get(id);
                 String prevUrl = prevTrack.getUrl();
+                url=prevUrl;
                 String prevAlbumCover=prevTrack.getArtwork();
                 String prevTitle=prevTrack.getTitle();
                 title.setText(prevTitle);
@@ -158,13 +159,13 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
                 }
                 AudioPlayer.getInstance(ChannelActivity.this).playRadioStream(prevUrl, ChannelActivity.this);
             }else {
-                ArrayList<Channel> channels = TracksContext.getChanelList(ChannelActivity.this);
                 System.out.println("PROBLEMATIC ID"+ id);
                 if(id<0) {
                     channels=TracksContext.getChanelList(ChannelActivity.this);
                     id=0;
                     Channel prevTrack = channels.get(id);
                     String prevUrl = prevTrack.getUrl();
+                    url=prevUrl;
                     String prevAlbumCover = prevTrack.getArtwork();
                     String prevTitle = prevTrack.getTitle();
                     title.setText(prevTitle);
@@ -184,6 +185,7 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
                     Channel prevTrack = channels.get(id);
                     System.out.println("THREE CLICKS");
                     String prevUrl = prevTrack.getUrl();
+                    url=prevUrl;
                     String prevAlbumCover = prevTrack.getArtwork();
                     String prevTitle = prevTrack.getTitle();
                     title.setText(prevTitle);
@@ -219,6 +221,7 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
                 id=0;
                 Channel nextTrack=channels.get(id);
                 String nextUrl=nextTrack.getUrl();
+                url=nextUrl;
                 String nextAlbumCover=nextTrack.getArtwork();
                 String nextTitle=nextTrack.getTitle();
                 title.setText(nextTitle);
@@ -236,6 +239,7 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
             }else{
                 Channel nextTrack=channels.get(id);
                 String nextUrl=nextTrack.getUrl();
+                url=nextUrl;
                 String nextAlbumCover=nextTrack.getArtwork();
                 String nextTitle=nextTrack.getTitle();
                 title.setText(nextTitle);

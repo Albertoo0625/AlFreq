@@ -26,5 +26,27 @@
     "title": "Capital FM Kenya",
     "artist": "Me",
     "artwork": "capital_fm_kenya"
-  }
+  },
+  {
+        "id": "4",
+        "url": "https://antares.dribbcast.com/proxy/s8200/stream",
+        "title": "Niche Radio 24 7 Reggae",
+        "artist": "Me",
+        "artwork": "nichereggae"
+  },
+  {
+          "id": "5",
+          "url": "https://stream.zeno.fm/any4ttxupoyuv",
+          "title": "Amapiano Volume 1",
+          "artist": "Me",
+          "artwork": "amapianovolumeone"
+  },
+  {
+          "id": "6",
+          "url": "https://atunwadigital.streamguys1.com/capitalfm",
+          "title": "Classic Fm Kenya",
+          "artist": "Me",
+          "artwork": "classic105"
+  },
+
 ]

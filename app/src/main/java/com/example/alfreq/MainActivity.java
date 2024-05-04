@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ChannelList=findViewById(R.id.channelListRecView);
+        ChannelList.setNestedScrollingEnabled(false);
         SearchBar=findViewById(R.id.searchBar);
         SearchIcon=findViewById(R.id.searchIcon);
         ChannelRecAdapter adapter= new ChannelRecAdapter(this);
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 String searchTerm=SearchBar.getText().toString().toLowerCase();
                 ArrayList<Channel>filteredChannels=new ArrayList<>();
                 for (Channel channel : channels){
-                    if(searchTerm!=null){
+                    if(channel != null && !searchTerm.isEmpty()){
                      if (channel.getTitle().toLowerCase().contains(searchTerm)) {
                         filteredChannels.add(channel); // Add the channel to the filtered list
                         channels=filteredChannels;
@@ -71,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
         });
        adapter.setChannels(channels);
        ChannelList.setAdapter(adapter);
-       ChannelList.setLayoutManager(new GridLayoutManager(this,2));
+       ChannelList.setLayoutManager(new GridLayoutManager(MainActivity.this,2));
+       ChannelList.smoothScrollBy(10,10);
     }
 }

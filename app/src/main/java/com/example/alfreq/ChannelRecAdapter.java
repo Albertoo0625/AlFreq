@@ -44,6 +44,7 @@ public class ChannelRecAdapter extends RecyclerView.Adapter<ChannelRecAdapter.Ch
 
     @Override
     public void onBindViewHolder(@NonNull ChannelAdaptor holder,int position) {
+ if(channels!= null && channels.get(position) != null){
         holder.listItem.setText(channels.get(position).getTitle());
         holder.title.setText(channels.get(position).getTitle());
         int resourceId = context.getResources().getIdentifier(channels.get(position).getArtwork(), "drawable", context.getPackageName());
@@ -60,14 +61,18 @@ public class ChannelRecAdapter extends RecyclerView.Adapter<ChannelRecAdapter.Ch
 //                String radioStreamUrl = channels.get(holder.getAdapterPosition()).getUrl();
 //                System.out.println(radioStreamUrl);
 //                AudioPlayer.getInstance(context).playRadioStream(radioStreamUrl,context);
-                Intent intent= new Intent(context,ChannelActivity.class);
-                intent.putExtra("channelId",holder.getAdapterPosition());
-                intent.putExtra("streamurl",channels.get(holder.getAdapterPosition()).getUrl());
-                intent.putExtra("imagepath",channels.get(holder.getAdapterPosition()).getArtwork());
-                intent.putExtra("titlepassed",channels.get(holder.getAdapterPosition()).getTitle());
+                Intent intent = new Intent(context, ChannelActivity.class);
+                intent.putExtra("channelId", holder.getAdapterPosition());
+                intent.putExtra("streamurl", channels.get(holder.getAdapterPosition()).getUrl());
+                intent.putExtra("imagepath", channels.get(holder.getAdapterPosition()).getArtwork());
+                intent.putExtra("titlepassed", channels.get(holder.getAdapterPosition()).getTitle());
                 context.startActivity(intent);
             }
         });
+
+    }else{
+     Toast.makeText(context, "Channel list done", Toast.LENGTH_SHORT).show();
+ }
     }
 
     @Override

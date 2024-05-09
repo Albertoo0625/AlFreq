@@ -1,7 +1,9 @@
 package com.example.alfreq;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
+import androidx.core.os.BuildCompat;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -21,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import android.window.OnBackInvokedDispatcher;
 import java.util.ArrayList;
 
 public class ChannelActivity extends AppCompatActivity implements ServiceConnection,ActionPlayer{
@@ -37,6 +40,7 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
     NotificationService notificationservice;
 
     private boolean isPlaying;
+    private boolean fromNotification=false;
 
     MediaSessionCompat mediaSession;
 
@@ -54,6 +58,25 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
 
         onCreate(null);
     }
+
+
+//    @NonNull
+//    @Override
+//    public OnBackInvokedDispatcher getOnBackInvokedDispatcher() {
+//        return super.getOnBackInvokedDispatcher();
+//    }
+
+
+    @NonNull
+    @Override
+    public OnBackInvokedDispatcher getOnBackInvokedDispatcher() {
+        if(isTaskRoot()){
+            Intent intent= new Intent(ChannelActivity.this,MainActivity.class);
+            startActivity(intent);
+        }
+        return super.getOnBackInvokedDispatcher();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -269,10 +292,13 @@ public class ChannelActivity extends AppCompatActivity implements ServiceConnect
 
     public void showNotification(int playPause,int id,String url,String image,String title){
         Intent contextIntent=new Intent(this,ChannelActivity.class);
+
         contextIntent.putExtra("channelid",id);
         contextIntent.putExtra("streamurl",url);
         contextIntent.putExtra("imagepath",image);
         contextIntent.putExtra("titlepassed",title);
+
+
 
 
         contextIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);

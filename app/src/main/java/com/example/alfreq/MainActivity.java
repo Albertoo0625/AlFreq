@@ -2,17 +2,20 @@ package com.example.alfreq;
 
 import static com.example.alfreq.ChannelRecAdapter.*;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+import android.window.OnBackInvokedDispatcher;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -30,6 +33,16 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<Channel>channels;
 
+
+    @NonNull
+    @Override
+    public OnBackInvokedDispatcher getOnBackInvokedDispatcher() {
+        if(isTaskRoot()){
+            Intent intent= new Intent(MainActivity.this,MainActivity.class);
+            startActivity(intent);
+        }
+        return super.getOnBackInvokedDispatcher();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

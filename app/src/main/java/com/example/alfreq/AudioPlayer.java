@@ -28,9 +28,19 @@ public class AudioPlayer implements AudioManager.OnAudioFocusChangeListener{
             public boolean onError(MediaPlayer mp, int what, int extra) {
                 Toast.makeText(context, "Error playing radio stream handle media player on error", Toast.LENGTH_SHORT).show();
                 AudioPlayer.getInstance(context);
-                return false;
+                resetPlayer();
+                return true;
             }
         });
+    }
+
+
+    private void resetPlayer() {
+        if (mediaPlayer != null) {
+            mediaPlayer.reset();
+            mediaPlayer.release();
+        }
+        instance = new AudioPlayer(context);
     }
 
     public static synchronized AudioPlayer getInstance(Context context) {
